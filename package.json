@@ -1,0 +1,26 @@
+{
+  "name": "ant_pos",
+  "version": "1.0.0",
+  "description": "pos application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd AntPos && yarn install",
+    "dev": "cd AntPos && yarn dev",
+    "build": "cd AntPos && yarn build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "frappe-ui": "0.1.177",
+    "mitt": "^3.0.1",
+    "pinia": "^3.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
+    "vite": "^5",
+    "vite-plugin-pwa": "^1.0.0"
+  }
+}

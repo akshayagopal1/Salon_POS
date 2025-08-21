@@ -1,0 +1,11 @@
+.DS_Store
+*.pyc
+*.egg-info
+*.swp
+tags
+dev-dist
+tags
+ant_pos/docs/current
+node_modules/
+AntPos/public/
+AntPos/yarn.lock
