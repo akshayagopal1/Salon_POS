@@ -1,6 +1,4 @@
 import { ref } from 'vue';
-import Settings from '../component/Dialog/Settings.vue';
-
 
 export function useDynamicComponent() {
     const currentComponent = ref(null);
@@ -9,13 +7,13 @@ export function useDynamicComponent() {
         try {
             const components = {
 
-                OpenShift: () => import('../component/Dialog/Open-Shift.vue'),
-                CustomerForm: () => import('../component/Dialog/CustomerForm.vue'),
-                Held: () => import('../component/Dialog/Held.vue'),
-                Return: () => import('../component/Dialog/Return.vue'),
-                CloseShift:() => import('../component/Dialog/CloseShift.vue'),
-                Settings:() => import('../component/Dialog/Settings.vue')
-            
+                OpenShift: () => import('@/components/Dialog/Open-Shift.vue'),
+                CustomerForm: () => import('@/components/Dialog/CustomerForm.vue'),
+                Held: () => import('@/components/Dialog/Held.vue'),
+                Return: () => import('@/components/Dialog/Return.vue'),
+                CloseShift: () => import('@/components/Dialog/CloseShift.vue'),
+                Settings: () => import('@/components/Dialog/Settings.vue'),
+                Attendance: () => import('../components/Dialog/Attendance.vue'), // ✅ Added
             };
 
             if (components[componentName]) {
@@ -26,7 +24,7 @@ export function useDynamicComponent() {
                 await new Promise((resolve) => setTimeout(resolve, 0));
 
                 const component = await components[componentName]();
-                
+
                 currentComponent.value = component.default;
             } else {
                 console.error(`Component "${componentName}" not found.`);

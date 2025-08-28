@@ -35,6 +35,7 @@ app.use(pinia)
 
 const base = reactive({
   customer: {},
+  employee: {},
   Ant_Opening_Shift:{},
   pos_profile:{},
   items:[],
@@ -42,6 +43,10 @@ const base = reactive({
     
   },
   page:'Pos',
+  discount_amount: 0.00,
+  additional_discount_percentage: 0.00,
+  total: 0.00,
+  is_return: false
 })
 app.provide('base', base)
 

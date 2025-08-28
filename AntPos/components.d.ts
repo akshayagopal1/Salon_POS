@@ -8,7 +8,28 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Attendance: typeof import('./src/components/Dialog/Attendance.vue')['default']
+    Autocomplete: typeof import('./src/components/custom_components/Autocomplete.vue')['default']
+    CloseShift: typeof import('./src/components/Dialog/CloseShift.vue')['default']
+    Customer: typeof import('./src/components/Customer.vue')['default']
+    CustomerForm: typeof import('./src/components/Dialog/CustomerForm.vue')['default']
+    Employee: typeof import('./src/components/Employee.vue')['default']
+    Held: typeof import('./src/components/Dialog/Held.vue')['default']
+    ImageUploader: typeof import('./src/components/Controls/ImageUploader.vue')['default']
+    Invoice: typeof import('./src/components/Invoice.vue')['default']
+    Item: typeof import('./src/components/Item.vue')['default']
+    ItemDetail: typeof import('./src/components/ItemDetail.vue')['default']
+    ItemSelector: typeof import('./src/components/ItemSelector.vue')['default']
+    Navbar: typeof import('./src/components/Navbar.vue')['default']
+    OpenShift: typeof import('./src/components/Dialog/Open-Shift.vue')['default']
+    PaymentSelect: typeof import('./src/components/PaymentSelect.vue')['default']
+    Platform: typeof import('./src/components/Platform.vue')['default']
+    Pos: typeof import('./src/components/Pos.vue')['default']
+    Return: typeof import('./src/components/Dialog/Return.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SalesInvoice: typeof import('./src/components/SalesInvoice.vue')['default']
+    Settings: typeof import('./src/components/Dialog/Settings.vue')['default']
+    Sidebar: typeof import('./src/components/Sidebar.vue')['default']
   }
 }

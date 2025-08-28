@@ -1,5 +1,5 @@
 <template>
-  <div class="m-3 flex flex-row items-center justify-center">
+  <div class="m-3 flex flex-row items-center justify-center" style="background-color: #f8f8fc !important; color: #82868f !important; font-family: 'futura-pt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; font-size: 17px !important; min-height: 100vh;">
     <Card title="Login to your FrappeUI App!" class="w-full max-w-md mt-4">
       <form class="flex flex-col space-y-2 w-full" @submit.prevent="submit">
         <Input
@@ -16,7 +16,7 @@
           placeholder="••••••"
           label="Password"
         />
-        <Button :loading="session.login.loading" variant="solid"
+        <Button :loading="session.login.loading" variant="solid" style="background-color: #4e60ac !important; border-color: #4e60ac !important; color: white !important; font-family: 'futura-pt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; font-size: 17px !important;"
           >Login</Button
         >
       </form>

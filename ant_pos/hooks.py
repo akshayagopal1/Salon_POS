@@ -1,5 +1,5 @@
 app_name = "ant_pos"
-app_title = "Ant-Pos"
+app_title = "IBS_POS"
 app_publisher = "Anther Technologies Pvt. Ltd."
 app_description = "pos application"
 app_email = "nihalroshan55@gmail.com"

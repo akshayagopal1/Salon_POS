@@ -1,4 +1,7 @@
 import { toast } from 'frappe-ui'
+import dayjs from 'dayjs'
+
+export const dayjsLocal = dayjs
 
 export function createToast(options) {
 	toast.create({

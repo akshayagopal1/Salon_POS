@@ -1,2 +1,63 @@
 @import './assets/Inter/inter.css';
 @import 'frappe-ui/src/style.css';
+
+/* POS Theme Colors */
+:root {
+  --sidebar-color: #4e60ac;
+  --sidebar-hover-color: #7c8bca;
+  --sidebar-bg-color: #ffffff;
+  --font-color: #82868f;
+  --dashboard-bg-color: #f8f8fc;
+  --chart-violet: #6c3387;
+  --chart-green: #149743;
+  --chart-blue: #414fae;
+}
+
+/* Global Font Settings */
+* {
+  font-family: 'futura-pt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+}
+
+/* Dashboard Background */
+body, .dashboard-container, .main-content {
+  background-color: var(--dashboard-bg-color);
+  color: var(--font-color);
+}
+
+/* Button Styles */
+.btn-primary, .button-primary {
+  background-color: var(--sidebar-color);
+  border-color: var(--sidebar-color);
+}
+
+.btn-primary:hover, .button-primary:hover {
+  background-color: var(--sidebar-hover-color);
+  border-color: var(--sidebar-hover-color);
+}
+
+/* Form Controls */
+.form-control, .input-field {
+  border-color: #e2e8f0;
+  color: var(--font-color);
+}
+
+.form-control:focus, .input-field:focus {
+  border-color: var(--sidebar-color);
+  box-shadow: 0 0 0 0.2rem rgba(78, 96, 172, 0.25);
+}
+
+/* Cards and Panels */
+.card, .panel, .dialog-content {
+  background-color: var(--sidebar-bg-color);
+  border-color: #e2e8f0;
+}
+
+/* Text Colors */
+.text-primary {
+  color: var(--sidebar-color) !important;
+}
+
+.text-muted {
+  color: var(--font-color) !important;
+}
