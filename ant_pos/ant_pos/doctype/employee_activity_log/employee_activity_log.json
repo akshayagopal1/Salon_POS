@@ -1,0 +1,27 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-08-28 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["employee", "activity_type", "timestamp", "sales_invoice"],
+ "fields": [
+  {"fieldname": "employee", "fieldtype": "Link", "label": "Employee", "options": "Employee", "reqd": 1},
+  {"fieldname": "activity_type", "fieldtype": "Select", "label": "Activity Type", "options": "Service Started\nService Completed", "reqd": 1},
+  {"fieldname": "timestamp", "fieldtype": "Datetime", "label": "Timestamp", "default": "Now", "reqd": 1},
+  {"fieldname": "sales_invoice", "fieldtype": "Link", "label": "Sales Invoice", "options": "Sales Invoice"}
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-28 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ant Pos",
+ "name": "Employee Activity Log",
+ "naming_rule": "Autoname",
+ "autoname": "format:LOG-{#####}",
+ "owner": "Administrator",
+ "permissions": [{"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

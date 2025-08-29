@@ -20,7 +20,7 @@ def calculate_invoice_item_taxes(doc):
         for item in invoice.items:
             data=get_price_list_rate_for(
                 {
-                    'price_list': 'Standard Selling', 
+                    'price_list': invoice.selling_price_list, 
                     "customer": invoice.customer,
                     "uom":item.uom,
                     "transaction_date": invoice.posting_date,

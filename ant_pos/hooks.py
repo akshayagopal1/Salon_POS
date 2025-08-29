@@ -1,9 +1,12 @@
 app_name = "ant_pos"
 app_title = "IBS_POS"
-app_publisher = "Anther Technologies Pvt. Ltd."
+app_publisher = "CNITS"
 app_description = "pos application"
-app_email = "nihalroshan55@gmail.com"
+app_email = "info@cnitsolution.com"
 app_license = "MIT"
+
+after_install = "ant_pos.install.after_install"
+
 
 # Includes in <head>
 # ------------------
@@ -118,7 +121,7 @@ app_license = "MIT"
 
 doc_events = {
 	"Payment Entry": {
-		"validate": "ant_pos.ant_pos.api.payment_entry.validate",
+		"validate": "ant_pos.api.payment_entry.validate",
 	}
 }
 
@@ -211,6 +214,13 @@ doc_events = {
 # auth_hooks = [
 # 	"ant_pos.auth.validate"
 # ]
+
+doc_events = {
+    "Sales Invoice": {
+        "validate": "ant_pos.api.commission.calculate_commission_on_validate",
+        "on_submit": "ant_pos.api.commission.log_activity_on_submit"
+    }
+}
 
 website_route_rules = [{'from_route': '/antPOS/<path:app_path>', 'to_route': 'antPOS'},]
 

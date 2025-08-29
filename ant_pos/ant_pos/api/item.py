@@ -26,6 +26,7 @@ def _update_item_info(scan_result: dict[str, str | None]) -> dict[str, str | Non
 
 @frappe.whitelist()
 def scan_barcode(search_value: str) -> Dict[str, Any]:
+    # ... (this function is fine, no changes needed) ...
     """Scans barcode, serial no, batch no, or item code and returns item details with HTTP status codes."""
 
     def set_cache(data: Dict[str, Any]):
@@ -127,6 +128,7 @@ def get_item_details_from_input(pos_profile, search_value, customer):
     selected_batch_no = search_values.get("batch_no")
     selected_serial_no = search_values.get("serial_no")
 
+    # ... (serial and batch no logic is fine, no changes needed here) ...
     serial_nos = []
     batch_nos = []
 
@@ -183,7 +185,9 @@ def get_item_details_from_input(pos_profile, search_value, customer):
         "barcode": search_values.get("barcode"),
         "customer": customer,
         "currency": company.default_currency,
-        "price_list": "Standard Selling",
+        # ================== CRITICAL FIX HERE ==================
+        "price_list": pos_profile_doc.selling_price_list,
+        # =======================================================
         "price_list_currency": company.default_currency,
         "company": company.name,
         "ignore_pricing_rule": pos_profile_doc.ignore_pricing_rule,
@@ -198,6 +202,7 @@ def get_item_details_from_input(pos_profile, search_value, customer):
     }
 
     item_details = get_item_details(item_args, doc=None, overwrite_warehouse=False)
+    # ... (rest of the function is fine, no changes needed) ...
     item_details["batch_nos"] = batch_nos
     item_details["selected_serial_no"] = [selected_serial_no] if has_serial_no and selected_serial_no else []
     item_details["selected_batch_no"] = selected_batch_no if has_batch_no and selected_batch_no else None
@@ -228,6 +233,7 @@ def get_item_details_from_input(pos_profile, search_value, customer):
 
 @frappe.whitelist()
 def items(pos_profile=None, search_value="", customer=None):
+    # ... (this function is fine, no changes needed) ...
     filters = [["disabled", "=", 0], ["is_sales_item", "=", 1]]
     if search_value:
         filters.append(["item_name", "like", f"%{search_value}%"])
@@ -235,7 +241,6 @@ def items(pos_profile=None, search_value="", customer=None):
     items_list = frappe.get_all(
         "Item",
         filters=filters,
-        # THE ONLY CHANGE IS HERE: ADDED "image" TO THE LIST OF FIELDS
         fields=["name as item_code", "item_name", "stock_uom", "standard_rate as rate", "image"],
         limit_page_length=30
     )
@@ -251,10 +256,12 @@ def items(pos_profile=None, search_value="", customer=None):
 
 
 def get_pos_warehouse(pos_profile_name):
+    # ... (this function is fine, no changes needed) ...
     return frappe.db.get_value("POS Profile", pos_profile_name, "warehouse")
 
 
 @frappe.whitelist()
 def get_batches_list(item_code, warehouse):
+    # ... (this function is fine, no changes needed) ...
     """Fetches batch numbers with stock"""
     return get_batches(item_code, warehouse)

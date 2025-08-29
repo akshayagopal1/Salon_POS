@@ -148,9 +148,8 @@
                 <Button
                     :ref_for="true"
                     label="Button"
-                    :loading="false"
-                    :loadingText="null"
-                    :disabled="false"
+                    :loading="sales_invoice.loading"
+                    :disabled="sales_invoice.loading"
                     :link="null"
                     :variant="'solid'"
                     @click="sales_invoice.fetch({ action:'Save', status:'save_new' })"
@@ -161,9 +160,8 @@
                 <Button
                     :ref_for="true"
                     label="Button"
-                    :loading="false"
-                    :loadingText="null"
-                    :disabled="false"
+                    :loading="sales_invoice.loading"
+                    :disabled="sales_invoice.loading"
                     :link="null"
                     @click="sales_invoice.fetch({ action:'Save', status:'pay' })"
                     style="background-color: #149743; color: #ffffff;"
@@ -173,9 +171,8 @@
                 <Button
                     :ref_for="true"
                     label="Button"
-                    :loading="false"
-                    :loadingText="null"
-                    :disabled="false"
+                    :loading="sales_invoice.loading"
+                    :disabled="sales_invoice.loading"
                     :link="null"
                     :variant="'solid'"
                     @click="sales_invoice.fetch({ action:'Save', status:'print' })"
@@ -208,10 +205,24 @@ import { inject, watch, ref, onMounted } from 'vue';
         console.log('Cart items changed:', newItems);
         console.log('Number of items:', newItems?.length || 0);
     }, { deep: true });
+
     let errorHandled = false;
+
     let sales_invoice = createResource({
         url: 'frappe.desk.form.save.savedocs',
         makeParams(params) {
+            // ================== MANDATORY FIELD CHECKS ==================
+            if (!base.customer?.name) {
+                createToast({ title: 'Validation Error', message: 'A Customer is required to save or pay.' });
+                // Throwing an error stops the createResource from proceeding
+                throw new Error("Customer not selected");
+            }
+            if (!base.items || base.items.length === 0) {
+                createToast({ title: 'Validation Error', message: 'Cannot process an empty cart.' });
+                throw new Error("Empty cart");
+            }
+            // =============================================================
+
             base.items.forEach((item) => {
                 if (item.has_serial_no && item.selected_serial_no.length !== item.qty) {
                     createToast({
@@ -223,9 +234,9 @@ import { inject, watch, ref, onMounted } from 'vue';
                     });
                     errorHandled = true;
                 }
-
             });
-            status = params.status
+
+            status = params.status;
             return {
                 doc: JSON.stringify({
                     ...base?.invoice,
@@ -243,21 +254,19 @@ import { inject, watch, ref, onMounted } from 'vue';
                     base_total: base.invoice.base_total && base.invoice.base_total,
                     custom_ant_opening: base.Ant_Opening_Shift.name,
                     apply_discount_on: base.pos_profile.apply_discount_on,
-                    payments:getPayments()
-
-
+                    payments: getPayments()
                 }),
-                action:params.action,
+                action: params.action,
             };
         },
         async onSuccess (data) {
             errorHandled = false;
             if ( status == 'pay'){
-                base.invoice = data.docs[0]
-                return
-
-            }else if (status == 'print'){
-                await baseurl.fetch()
+                base.invoice = data.docs[0];
+                emitter.emit('updatePage', 'payments'); // Assuming 'payments' is the name for your payment screen
+                return;
+            } else if (status == 'print'){
+                await baseurl.fetch();
                 window.open(
                     `${baseurl.data}/printview?doctype=Sales+Invoice&name=${
                         data.docs[0].name
@@ -266,15 +275,16 @@ import { inject, watch, ref, onMounted } from 'vue';
                     "_blank"
                 );
             }
-            remove_invoice()
-
-
+            createToast({ title: 'Success', message: 'Invoice saved successfully.' });
+            remove_invoice();
         },
         onError(error) {
+            // The createResource might not proceed if we throw an error in makeParams,
+            // but this is a good safety net.
             if (!errorHandled) {
                 createToast({
                     title: 'error',
-                    message: Array.isArray(error?.messages) ? error.messages[0] : error?.messages || error || 'An error occurred',
+                    message: Array.isArray(error?.messages) ? error.messages[0] : error?.messages || 'An error occurred',
                     icon: 'x-circle',
                     iconClasses: 'bg-surface-red-5 text-ink-white rounded-md p-px',
                     position: 'top-center',
@@ -285,27 +295,27 @@ import { inject, watch, ref, onMounted } from 'vue';
         },
     });
 
-const getPayments = () => {
-    const total = base.is_return ? -Math.abs(base.invoice.rounded_total) : base.invoice.rounded_total;
+    const getPayments = () => {
+        const total = base.is_return ? -Math.abs(base.invoice.rounded_total) : base.invoice.rounded_total;
 
-    const payments = (base.invoice.payments || []).map(p => {
-        const amount = p.default ? total : 0;
-        return {
-            ...p,
-            amount,
-            base_amount: amount
-        };
-    });
+        const payments = (base.invoice.payments || []).map(p => {
+            const amount = p.default ? total : 0;
+            return {
+                ...p,
+                amount,
+                base_amount: amount
+            };
+        });
 
-    return payments;
-};
+        return payments;
+    };
 
     const calcuateDiscount = () => {
         let amount = base.pos_profile.apply_discount_on === 'grand_total' ? base.invoice.grand_total : base.invoice.base_net_total + base.invoice?.discount_amount ;
         if (base.pos_profile.custom_use_percentage_discount) {
-            base.discount_amount= (amount * 100) / base.additional_discount_percentage;
+            base.discount_amount = (amount * base.additional_discount_percentage) / 100;
         } else {
-            base.additional_discount_percentage = base.discount_amount * (100 / amount);
+            base.additional_discount_percentage = amount ? (base.discount_amount * 100) / amount : 0;
         }
     };
 
@@ -333,7 +343,9 @@ const getPayments = () => {
         base.invoice = {};
         base.items = [];
         base.customer = {};
+        base.employee = {};
         base.discount_amount = 0.00;
+        base.additional_discount_percentage = 0.00;
     };
 
 </script>

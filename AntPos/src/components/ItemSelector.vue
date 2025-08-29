@@ -131,11 +131,16 @@
         item_code: item.item_code,
         item_name: item.item_name,
         rate: item.rate,
-        image: item.image, // MODIFIED: Added image to the cart item
+        image: item.image,
         stock_uom: item.stock_uom,
         uom: item.stock_uom,
         qty: 1,
         amount: item.rate * 1,
+
+        // ================== LINE ADDED HERE ==================
+        sales_person: base.employee.name, // Send the currently selected employee
+        // =====================================================
+
         doctype: 'Sales Invoice Item',
         parenttype: 'Sales Invoice',
         custom_id: `cart-item-${Date.now()}`
