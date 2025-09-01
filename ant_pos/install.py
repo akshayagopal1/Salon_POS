@@ -63,15 +63,10 @@ def setup_tips_in_tax_template(company):
     print("Setting up 'Tips' in Sales Taxes and Charges Template...")
     company_abbr = frappe.get_cached_value('Company', company, 'abbr')
     
-    # ================== THE CRITICAL FIX ==================
-    # Construct the full, correct account name that ERPNext expects.
-    # It might be "Tips Received" or "Tips Received - ABBR" depending on settings.
-    # We query for it to be 100% sure.
     tips_account_full_name = frappe.db.get_value("Account", {"account_name": "Tips Received", "company": company})
     if not tips_account_full_name:
-        print("ERROR: 'Tips Received' account not found after creation. Aborting tax setup.")
+        print("ERROR: 'Tips Received' account not found. Aborting tax setup.")
         return
-    # ======================================================
 
     template_name = frappe.db.get_value("Sales Taxes and Charges Template", {"is_default": 1, "company": company})
     
@@ -85,14 +80,19 @@ def setup_tips_in_tax_template(company):
                 "is_default": 1,
                 "taxes": []
              }).insert(ignore_permissions=True)
+             
+             # ================== THE CRITICAL FIX ==================
+             # Force the database to commit the new template before proceeding.
              frappe.db.commit()
+             # ======================================================
+             
              print(f"Created default template: {template_name}")
     
     template_doc = frappe.get_doc("Sales Taxes and Charges Template", template_name)
     if not any(tax.description == "Tips" for tax in template_doc.taxes):
         template_doc.append("taxes", {
             "charge_type": "On Net Total",
-            "account_head": tips_account_full_name, # Use the full, correct name
+            "account_head": tips_account_full_name,
             "description": "Tips",
             "cost_center": frappe.get_cached_value('Company', company, 'cost_center'),
             "rate": 0,
